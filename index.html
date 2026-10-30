@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Drinko | Crack the fizz</title>
+  <meta name="description" content="Drinko: ice-cold sparkling soda in three loud flavors. Tap the can.">
+  <meta name="theme-color" content="#14020a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='8' y='2' width='16' height='28' rx='5' fill='%23e11d48'/%3E%3Crect x='8' y='2' width='16' height='5' rx='2.5' fill='%23cfd3da'/%3E%3Crect x='8' y='25' width='16' height='5' rx='2.5' fill='%23cfd3da'/%3E%3C/svg%3E">
+
+  <!-- Fonts: Unbounded (display) + Manrope (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;700;800;900&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- GSAP + ScrollTrigger (deferred, they run before the module below) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Three.js is only downloaded when the 3D hero is used (dynamic import) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <link rel="modulepreload" href="js/config.js">
+  <link rel="modulepreload" href="js/animations.js">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body class="is-loading">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- Loader -->
+  <div class="loader" id="loader" role="status" aria-live="polite">
+    <div class="loader__inner">
+      <div class="loader__can" aria-hidden="true">
+        <span class="loader__fill"></span>
+        <span class="loader__bubbles"><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+      <p class="loader__brand">Drinko</p>
+      <p class="loader__status">Chilling <span id="loaderPercent">0</span>%</p>
+      <p class="loader__help">
+        The site couldn't start. If you opened <code>index.html</code> directly, your browser
+        is probably blocking JavaScript modules on <code>file://</code>. Run
+        <code>npx serve</code> in the project folder and open the URL it prints.
+      </p>
+    </div>
+  </div>
+
+  <!-- Fixed background layers -->
+  <div class="bg" id="bg" aria-hidden="true">
+    <div class="bg__glow" id="bgGlow"></div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="ambient" id="ambient" aria-hidden="true"></div>
+  <!-- 3D hero can (WebGL). Hidden in the 2D fallback. -->
+  <canvas class="scene3d" id="scene3d" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="nav__logo" href="#top">Drinko<sup>®</sup></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#flavors">Flavors</a>
+      <a href="#inside">Inside</a>
+      <a href="#grab">Grab one</a>
+    </nav>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
+      <svg class="sound-toggle__icon sound-toggle__icon--off" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/>
+        <path d="M17 9l5 5M22 9l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <svg class="sound-toggle__icon sound-toggle__icon--on" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/>
+        <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span>Sound</span>
+      <span class="sound-toggle__state" aria-hidden="true">Off</span>
+    </button>
+  </header>
+
+  <main id="main">
+    <!-- 1. Hero -->
+    <section class="hero" id="top" aria-labelledby="heroTitle">
+      <p class="hero__word" aria-hidden="true">DRINKO</p>
+      <!-- Matter.js ice / fruit / bubbles (3D experience only) -->
+      <canvas class="hero__physics" id="heroPhysics" aria-hidden="true"></canvas>
+
+      <div class="hero__copy">
+        <p class="eyebrow reveal">Sparkling soda · Est. 2026</p>
+        <h1 class="hero__title reveal" id="heroTitle">Crack <span>the fizz.</span></h1>
+        <p class="hero__sub reveal" id="heroSub"></p>
+        <a class="btn btn--accent reveal" href="#flavors">Explore flavors</a>
+      </div>
+
+      <div class="hero__stage" id="heroStage">
+        <div class="hero__decor" id="heroDecor" aria-hidden="true"></div>
+        <!-- The hero can <button> is injected here by main.js -->
+        <p class="hero__hint" id="heroHint">
+          <span class="hero__hint-dot" aria-hidden="true"></span>
+          <span class="hero__hint-text" id="heroHintText">Tap the can</span>
+        </p>
+      </div>
+
+      <div class="hero__panel">
+        <p class="eyebrow reveal" id="pickerLabel">Choose your flavor</p>
+        <div class="picker reveal" id="picker" role="radiogroup" aria-labelledby="pickerLabel"></div>
+        <div class="hero__flavor reveal">
+          <p class="hero__flavor-name"><span id="flavorName"></span></p>
+          <p class="hero__flavor-tagline"><span id="flavorTagline"></span></p>
+        </div>
+        <!-- Shake it (3D experience only): pressure builds until the can erupts -->
+        <div class="shake reveal" id="shake">
+          <button class="shake__btn" id="shakeBtn" type="button" aria-describedby="shakeHelp">
+            <span class="shake__meter" aria-hidden="true"><span class="shake__fill" id="shakeFill"></span></span>
+            <span class="shake__label" id="shakeLabel">Hold to shake</span>
+          </button>
+          <p class="shake__help" id="shakeHelp">or wiggle the can fast</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scroll story: pinned in the 3D experience, a simple list in 2D -->
+    <section class="story" id="story" aria-labelledby="storyTitle">
+      <h2 class="sr-only" id="storyTitle">How a Drinko comes together</h2>
+      <div class="story__inner">
+        <div class="story__beats" id="storyBeats"></div>
+        <div class="story__progress" aria-hidden="true"><span class="story__progress-bar"></span></div>
+      </div>
+    </section>
+
+    <div class="marquee-wrap" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee__track" id="marqueeTrack"></div>
+      </div>
+    </div>
+
+    <!-- 2. Flavor showcase -->
+    <section class="flavors" id="flavors" aria-labelledby="flavorsTitle">
+      <header class="section-head">
+        <p class="eyebrow">The lineup</p>
+        <h2 class="section-title" id="flavorsTitle" data-split>Three flavors. Zero chill.</h2>
+        <p class="section-lead">Every can is a different mood. Tap one to crack it, or pick it to make it the star.</p>
+      </header>
+      <div class="flavors__grid" id="flavorGrid"></div>
+
+      <!-- 3D carousel (replaces the cards once the 3D experience has built it) -->
+      <div class="carousel" id="carousel">
+        <span class="carousel__glow" aria-hidden="true"></span>
+        <div class="carousel__stage" id="carouselStage" tabindex="0" role="group" aria-roledescription="carousel"
+          aria-label="Flavor carousel. Arrow keys turn it, Enter cracks the front can."></div>
+        <div class="carousel__info">
+          <p class="carousel__index" id="carouselIndex"></p>
+          <h3 class="carousel__title"><span id="carouselTitle"></span></h3>
+          <p class="carousel__tagline"><span id="carouselTagline"></span></p>
+          <p class="carousel__text" id="carouselText"></p>
+          <ul class="flavor-card__notes" id="carouselNotes" aria-label="Tasting notes"></ul>
+          <div class="carousel__actions">
+            <button class="btn btn--accent" id="carouselPick" type="button">Pick it</button>
+            <div class="carousel__nav">
+              <button class="carousel__arrow" id="carouselPrev" type="button" aria-label="Previous flavor">&larr;</button>
+              <div class="carousel__dots" id="carouselDots"></div>
+              <button class="carousel__arrow" id="carouselNext" type="button" aria-label="Next flavor">&rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Exploded anatomy: pinned 3D take-apart in 3D, a list of facts in 2D -->
+    <section class="anatomy" id="anatomy" aria-labelledby="anatomyTitle">
+      <div class="anatomy__inner" id="anatomyInner">
+        <header class="anatomy__head">
+          <p class="eyebrow">Anatomy of a can</p>
+          <h2 class="section-title" id="anatomyTitle">Every layer, on purpose.</h2>
+          <p class="anatomy__lead">Keep scrolling to take one apart.</p>
+        </header>
+        <div class="anatomy__stage" id="anatomyStage" aria-hidden="true"></div>
+        <svg class="anatomy__lines" id="anatomyLines" aria-hidden="true"></svg>
+        <ul class="anatomy__callouts" id="anatomyCallouts"></ul>
+      </div>
+    </section>
+
+    <!-- 3. Ingredients / fun facts -->
+    <section class="inside" id="inside" aria-labelledby="insideTitle">
+      <div class="floaters" id="floaters" aria-hidden="true"></div>
+      <header class="section-head">
+        <p class="eyebrow">Ingredients &amp; fun facts</p>
+        <h2 class="section-title" id="insideTitle" data-split>What's inside the fizz</h2>
+      </header>
+      <ol class="ingredients" id="ingredients"></ol>
+      <ul class="facts" id="facts" aria-label="Fun facts"></ul>
+    </section>
+
+    <!-- The pour: pinned 3D pour into a glass in 3D, plain copy in 2D -->
+    <section class="pour" id="pour" aria-labelledby="pourTitle">
+      <div class="pour__inner">
+        <div class="pour__copy">
+          <p class="eyebrow">The perfect pour</p>
+          <h2 class="section-title" id="pourTitle">Tilt. Pour. Fizz.</h2>
+          <div class="pour__lines" id="pourLines">
+            <p class="pour__line"><strong>Tilt.</strong> Hold it at an angle, right over the ice.</p>
+            <p class="pour__line"><strong>Pour.</strong> Slowly, down the side, so the bubbles stay in the drink.</p>
+            <p class="pour__line"><strong>Fizz.</strong> Stop just before the head spills over. Perfect.</p>
+          </div>
+          <p class="pour__level" aria-hidden="true"><span id="pourLevel">0</span>%</p>
+        </div>
+        <div class="pour__stage" id="pourStage" aria-hidden="true"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 4. Footer CTA -->
+  <footer class="footer" id="grab">
+    <h2 class="footer__title" data-split>Grab a cold one.</h2>
+    <p class="footer__lead">Go on, tap a can. Nobody's watching.</p>
+    <div class="footer__cans" id="footerCans"></div>
+    <button class="btn btn--accent btn--big" id="ctaCrack" type="button">Crack one open</button>
+    <p class="footer__legal">© 2026 Drinko. A fictional brand made for a portfolio project. Please recycle your imaginary cans.</p>
+  </footer>
+
+  <!-- Particle layer for bursts (above everything, ignores the pointer) -->
+  <div class="fx-layer" aria-hidden="true"></div>
+  <p class="sr-only" id="announcer" aria-live="polite"></p>
+
+  <!-- Watchdog: if modules never boot (e.g. file:// in Chrome), explain why. -->
+  <script>
+    setTimeout(function () {
+      if (!window.__drinkoBooted) document.documentElement.classList.add('boot-failed');
+    }, 4000);
+  </script>
+</body>
+</html>
