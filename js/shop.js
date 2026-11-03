@@ -5,6 +5,7 @@
  * from SHOP + FLAVORS in config.js. Checkout goes to SHOP.checkoutUrl when set.
  */
 import { SHOP, FLAVORS } from './config.js';
+import { initCheckout } from './checkout.js';
 
 const { gsap } = window;
 const $ = (id) => document.getElementById(id);
@@ -153,9 +154,15 @@ export function initShop({ reducedMotion = false } = {}) {
     flyToCart();
   });
 
+  const checkout = initCheckout({
+    getCart: () => cart,
+    money, priceOf, flavorOf,
+    clearCart: () => { cart = []; renderCart(); },
+  });
   $('checkout').addEventListener('click', () => {
     if (SHOP.checkoutUrl) { window.location.href = SHOP.checkoutUrl; return; }
-    $('checkoutNote').textContent = 'Demo store: set SHOP.checkoutUrl in config.js to enable real checkout.';
+    setOpen(false);
+    checkout.open();
   });
 
   // Little cans fly from the summary into the cart button

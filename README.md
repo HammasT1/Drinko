@@ -96,6 +96,7 @@ js/sound.js             Toggleable sound with a synthesized fallback
 js/story.js             Lenis smooth scroll + pinned ScrollTrigger story
 js/sections.js          Pinned scroll timelines for the anatomy + pour sections
 js/shop.js              Pack builder, cart drawer, free-shipping meter (localStorage)
+js/checkout.js          3-step checkout: details, delivery, payment, confirmation
 js/chrome.js            Header + footer behavior: progress bar, menu, newsletter form
 js/physics.js           Matter.js ice / fruit / bubbles in the hero
 js/polish.js            Liquid wipe, magnetic buttons, custom cursor, lens drips
@@ -223,7 +224,7 @@ marquee all pick it up.
 | `SCENE_3D.particles`, `.condensation`, `.flyers` | Particle budgets, desktop / mobile |
 | `PHYSICS` | Number of ice cubes, fruit and bubbles; `mobileScale` |
 | `STORY` | The scroll-story beats (kicker, title, text) |
-| `SHOP` | Currency, free-shipping threshold, pack sizes and prices, `checkoutUrl` |
+| `SHOP` | Currency, free-shipping threshold, pack sizes and prices, `taxRate`, `promoCodes`, `shipping` options, `checkoutUrl` |
 | `ANATOMY` | Exploded-view callouts: `part` (`tab`, `lid`, `sleeve`, `wall`, `liquid`, `base`), `side` (`left`/`right`), title, text |
 
 <img src="assets/readme/divider.svg" alt="" width="100%">
@@ -254,10 +255,24 @@ The shop is configured in `SHOP` (`js/config.js`): pack sizes and prices,
 currency and the free-shipping threshold. Flavors come from `FLAVORS`, so a new
 flavor appears in the mixer automatically. The cart is saved in `localStorage`.
 
-Checkout is a demo until you connect a store. Set `SHOP.checkoutUrl` to a
-Stripe Payment Link or a Shopify cart URL and the **Checkout** button redirects
-there. For a real order flow, build the line items on your server from the
-cart (`size`, `mix`, `qty`) rather than trusting prices from the browser.
+### Checkout
+
+Pressing **Checkout** in the cart opens a full-screen, three-step flow:
+
+1. **Details:** email and address, with inline validation and autofill hints.
+2. **Delivery:** standard or express, with free standard shipping over the threshold.
+3. **Payment:** a live card preview that formats the number, detects the brand and flips to show the CVC. Card numbers are checked with the Luhn algorithm and expiry dates against today.
+
+The order summary stays in view, totals count up smoothly, and promo codes
+(try `DRINKO10`) apply instantly. Placing the order plays a can-filling
+animation, then a confirmation with a drawn checkmark and confetti. The cart
+is cleared and the card fields are wiped.
+
+**It's a front-end demo: no payment is taken and nothing is sent anywhere.**
+To go live, set `SHOP.checkoutUrl` to a Stripe Payment Link or a Shopify cart
+URL (the Checkout button then redirects there), or post the order to your own
+server and charge with Stripe, never with card data from your own form. Always
+recalculate prices on the server. Animations are skipped with reduced motion.
 
 <img src="assets/readme/divider.svg" alt="" width="100%">
 

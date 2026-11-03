@@ -201,14 +201,20 @@ export const FUN_FACTS = [
 
 /**
  * Shop. Prices are in the smallest sensible unit shown to the customer.
- * `checkoutUrl`: set to a Stripe Payment Link / Shopify cart URL to make the
- * Checkout button go live; leave empty to show a demo message instead.
+ * `checkoutUrl`: set to a Stripe Payment Link / Shopify cart URL to send
+ * customers to a real checkout; leave empty to use the built-in demo checkout.
  */
 export const SHOP = {
   currency: 'USD',
   locale: 'en-US',
   freeShippingOver: 40,
   checkoutUrl: '',
+  taxRate: 0.07, // estimated sales tax shown at checkout
+  promoCodes: { DRINKO10: 0.1 }, // code -> fraction off the subtotal
+  shipping: [
+    { id: 'standard', label: 'Standard', days: '3-5 business days', price: 4.99, freeOverThreshold: true },
+    { id: 'express', label: 'Express', days: '1-2 business days', price: 9.99 },
+  ],
   packs: [
     { size: 6, price: 14, tag: '' },
     { size: 12, price: 25, tag: 'Most popular' },
