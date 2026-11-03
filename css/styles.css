@@ -1630,3 +1630,7 @@ html.lenis, html.lenis body { height: auto; }
   .co__fill i { transform: none; }
   .co__check circle, .co__check path { stroke-dashoffset: 0; }
 }
+
+.signup .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.signup__msg:not([data-ok="1"]):not(:empty) { color: #ff8fa0; }
+.signup button:disabled { opacity: 0.6; cursor: progress; }

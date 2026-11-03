@@ -221,3 +221,11 @@ export const SHOP = {
     { size: 24, price: 46, tag: 'Best value' },
   ],
 };
+
+/**
+ * Forms. `newsletterEndpoint` receives the footer signup (Formspree).
+ * Submissions arrive in your Formspree inbox; set to '' to only validate.
+ */
+export const FORMS = {
+  newsletterEndpoint: 'https://formspree.io/f/xeaapbry',
+};

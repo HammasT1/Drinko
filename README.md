@@ -281,8 +281,10 @@ recalculate prices on the server. Animations are skipped with reduced motion.
 - **Header:** `js/chrome.js` drives the scroll progress bar, hides the bar on
   scroll down and shows it on scroll up, highlights the current section and
   runs the mobile menu (Escape closes it).
-- **Footer:** the newsletter form only validates the address. Point it at your
-  email provider (Mailchimp, Formspree, etc.) in `chrome.js`. The Company,
+- **Footer:** the newsletter form posts to a [Formspree](https://formspree.io)
+  endpoint set in `FORMS.newsletterEndpoint` (`js/config.js`), with a honeypot
+  field against bots and clear success and error messages. Leave the endpoint
+  empty to only validate. The Company,
   Follow and legal links are placeholders (`#`).
 
 <img src="assets/readme/divider.svg" alt="" width="100%">

@@ -269,9 +269,11 @@
       <div class="footer__brand">
         <a class="nav__logo" href="#top">Drinko<sup>®</sup></a>
         <p>Three flavors. Zero boring. Crafted to be loud, cold and impossible to ignore.</p>
-        <form class="signup" id="signup" novalidate>
+        <form class="signup" id="signup" method="POST" novalidate>
           <label class="sr-only" for="signupEmail">Email address</label>
-          <input id="signupEmail" type="email" placeholder="you@email.com" autocomplete="email" required>
+          <input id="signupEmail" name="email" type="email" placeholder="you@email.com" autocomplete="email" required>
+          <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <input type="hidden" name="_subject" value="New Drinko newsletter signup">
           <button class="btn btn--accent" type="submit">Join the fizz</button>
           <p class="signup__msg" id="signupMsg" role="status"></p>
         </form>

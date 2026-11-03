@@ -1,3 +1,5 @@
+import { FORMS } from './config.js';
+
 /**
  * Header + footer behavior: scroll progress, hide-on-scroll nav, active link,
  * mobile menu, and the newsletter form (front-end only until wired to a service).
@@ -42,11 +44,29 @@ export function initChrome() {
 
   const form = document.getElementById('signup');
   const msg = document.getElementById('signupMsg');
-  form?.addEventListener('submit', (e) => {
+  const submit = form?.querySelector('button[type="submit"]');
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = form.querySelector('input');
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-    msg.textContent = ok ? 'You are on the list. Stay fizzy.' : 'Please enter a valid email address.';
-    if (ok) form.reset();
+    const email = form.elements.email;
+    const say = (text, ok) => { msg.textContent = text; msg.dataset.ok = ok ? '1' : ''; };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { say('Please enter a valid email address.', false); email.focus(); return; }
+    if (form.elements._gotcha.value) return; // bots fill the hidden field
+    const endpoint = FORMS.newsletterEndpoint;
+    if (!endpoint) { say('You are on the list. Stay fizzy.', true); form.reset(); return; }
+
+    submit.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    say('Sending...', true);
+    try {
+      const response = await fetch(endpoint, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (!response.ok) throw new Error(String(response.status));
+      say('You are on the list. Stay fizzy.', true);
+      form.reset();
+    } catch {
+      say('Something went wrong. Please try again in a moment.', false);
+    } finally {
+      submit.disabled = false;
+      form.removeAttribute('aria-busy');
+    }
   });
 }
