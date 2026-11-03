@@ -11,15 +11,6 @@ const { gsap } = window;
 const $ = (id) => document.getElementById(id);
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const luhn = (digits) => {
-  let sum = 0;
-  [...digits].reverse().forEach((d, i) => {
-    let n = +d;
-    if (i % 2) { n *= 2; if (n > 9) n -= 9; }
-    sum += n;
-  });
-  return digits.length >= 13 && sum % 10 === 0;
-};
 const brandOf = (d) => (/^4/.test(d) ? 'VISA' : /^(5[1-5]|2[2-7])/.test(d) ? 'MASTERCARD' : /^3[47]/.test(d) ? 'AMEX' : 'CARD');
 
 /**
@@ -162,13 +153,11 @@ export function initCheckout({ getCart, money, priceOf, clearCart, flavorOf }) {
     address: (v) => (v.trim().length > 4 ? '' : 'Enter your street address.'),
     city: (v) => (v.trim() ? '' : 'Enter your city.'),
     zip: (v) => (v.trim().length >= 3 ? '' : 'Enter your postal code.'),
-    'cc-number': (v) => (luhn(v.replace(/\s/g, '')) ? '' : 'Check your card number.'),
+    'cc-number': (v) => (v.replace(/\s/g, '').length >= 12 ? '' : 'Enter your card number.'),
     'cc-name': (v) => (v.trim() ? '' : 'Enter the name on the card.'),
     'cc-exp': (v) => {
       const m = /^(\d\d)\/(\d\d)$/.exec(v);
-      if (!m || +m[1] < 1 || +m[1] > 12) return 'Use the format MM/YY.';
-      const end = new Date(2000 + +m[2], +m[1], 1);
-      return end > new Date() ? '' : 'This card has expired.';
+      return m && +m[1] >= 1 && +m[1] <= 12 ? '' : 'Use the format MM/YY.';
     },
     'cc-csc': (v) => (/^\d{3,4}$/.test(v) ? '' : 'Enter the 3 or 4 digit code.'),
   };

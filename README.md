@@ -261,7 +261,7 @@ Pressing **Checkout** in the cart opens a full-screen, three-step flow:
 
 1. **Details:** email and address, with inline validation and autofill hints.
 2. **Delivery:** standard or express, with free standard shipping over the threshold.
-3. **Payment:** a live card preview that formats the number, detects the brand and flips to show the CVC. Card numbers are checked with the Luhn algorithm and expiry dates against today.
+3. **Payment:** a live card preview that formats the number, detects the brand and flips to show the CVC. Fields only need to be filled in with the right shape (12+ digits, MM/YY, 3-4 digit CVC), so any dummy card works in the demo.
 
 The order summary stays in view, totals count up smoothly, and promo codes
 (try `DRINKO10`) apply instantly. Placing the order plays a can-filling
