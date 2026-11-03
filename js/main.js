@@ -14,6 +14,11 @@ import {
 import { sound } from './sound.js';
 import * as fx from './animations.js';
 import { liquidWipe, initMagnetic, initCursor, screenDrips } from './polish.js';
+import { initChrome } from './chrome.js';
+import { initShop } from './shop.js';
+
+initChrome();
+initShop({ reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches });
 
 window.__drinkoBooted = true; // lets the inline watchdog in index.html know modules loaded
 

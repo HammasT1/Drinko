@@ -1,28 +1,43 @@
-# Drinko: animated soda product page
+<div align="center">
 
-A single-page, cinematic product site for **Drinko**, a fictional soft-drink brand.
-Plain HTML, CSS and vanilla JavaScript (ES modules), no build step.
+<img src="assets/readme/banner.svg" alt="Drinko: crack the fizz" width="100%">
 
-- **3D experience** (WebGL + motion allowed): a Three.js can with PBR metal,
-  HDR reflections and soft shadows, physically simulated splash and fizz
-  particles, condensation sliding down the can, Matter.js ice and fruit, a
-  pinned scroll story with Lenis smooth scrolling, a liquid-wipe flavor
-  transition, a custom cursor and magnetic buttons. Plus four showpiece
-  sections:
-  - **Shake it:** shake your phone, wiggle the can, or hold the button until
-    the pressure meter fills and the can erupts in a geyser.
-  - **3D flavor carousel:** cans on a ring over a glossy floor. Drag, tap
-    or use the arrow keys.
-  - **Exploded anatomy:** scroll to take the can apart layer by layer, with
-    labelled callouts.
-  - **The pour:** scroll to tip the can into a glass of ice. Watch it fill,
-    fizz and foam.
-- **2D fallback** (no WebGL, or `prefers-reduced-motion`): the original
-  SVG/GSAP site. Nothing heavy is downloaded in this mode.
+<br>
 
-**Try it:** tap a can to crack it open. Drag the hero can to spin it (it keeps
-its momentum). Double-tap, long-press or press **R** for a 360° spin. Pick a
-flavor to flood the page with it.
+![Three.js](https://img.shields.io/badge/Three.js-r160-black?style=for-the-badge&logo=threedotjs&logoColor=white)
+![GSAP](https://img.shields.io/badge/GSAP-ScrollTrigger-88CE02?style=for-the-badge&logo=greensock&logoColor=white)
+![Vanilla JS](https://img.shields.io/badge/Vanilla-JS%20ES%20Modules-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![No build](https://img.shields.io/badge/Build%20step-none-e11d48?style=for-the-badge)
+![60 fps](https://img.shields.io/badge/Target-60%20fps-ff9f1c?style=for-the-badge)
+
+**A cinematic, shoppable product site for a fictional soda brand.**
+Real-time 3D, physics, scroll storytelling and a working cart, in plain HTML, CSS and JavaScript.
+
+[Live demo](#) &nbsp;·&nbsp; [Run it locally](#running-it) &nbsp;·&nbsp; [Customize](#swapping-in-your-own-assets)
+
+</div>
+
+<!-- Add a preview GIF here: ![Preview](assets/readme/preview.gif) -->
+
+## Highlights
+
+| | |
+|---|---|
+| **3D hero can** | Procedural PBR can with HDR reflections, soft shadows, drag-to-spin inertia, condensation and physically simulated splash and fizz. |
+| **Shake it** | Hold, wiggle the can or physically shake your phone. Pressure builds, then the can erupts in a geyser. |
+| **3D flavor carousel** | Cans on a ring over a glossy floor. Drag, tap or use arrow keys. |
+| **Exploded anatomy** | A pinned scroll scene that takes the can apart, with labelled callouts. |
+| **The pour** | Scroll to tip the can into a glass of ice and watch it fill, fizz and foam. |
+| **Shop and cart** | Pack builder (6 / 12 / 24), flavor mixer, slide-out cart, free-shipping meter and a fly-to-cart animation. Cart persists between visits. |
+| **Premium chrome** | Floating glass header with scroll progress, hide-on-scroll, active-section highlight and mobile menu. Full footer with newsletter signup. |
+| **Resilient** | 2D fallback without WebGL or with reduced motion. Adaptive quality keeps frame rate near 60 on integrated GPUs. |
+
+Also included: Lenis smooth scroll, Matter.js ice and fruit, a liquid-wipe
+flavor transition, a custom cursor, magnetic buttons, film grain and a
+toggleable sound design.
+
+**Try it:** tap a can to crack it open. Drag the hero can to spin it. Double-tap,
+long-press or press **R** for a 360 spin. Pick a flavor to flood the page with it.
 
 ## Running it
 
@@ -43,8 +58,9 @@ Add `?debug` to the URL to get `window.drinko` (`hero3d`, `physics`,
 
 ## Page order
 
-Hero (with **Shake it**) → scroll story → marquee → **3D flavor carousel** →
-**anatomy** → ingredients → **pour** → footer.
+Header → Hero (with **Shake it**) → scroll story → marquee → **3D flavor
+carousel** → **anatomy** → ingredients → **pour** → **shop** → footer (call to
+action, newsletter, links) with the cart drawer available everywhere.
 
 In the 2D fallback, the carousel stays the flat flavor cards, the anatomy is a
 list of facts, and the pour is plain copy.
@@ -62,6 +78,8 @@ js/placeholders.js      SVG generators for 2D cans, splash, ice, fruit, bubbles
 js/sound.js             Toggleable sound with a synthesized fallback
 js/story.js             Lenis smooth scroll + pinned ScrollTrigger story
 js/sections.js          Pinned scroll timelines for the anatomy + pour sections
+js/shop.js              Pack builder, cart drawer, free-shipping meter (localStorage)
+js/chrome.js            Header + footer behavior: progress bar, menu, newsletter form
 js/physics.js           Matter.js ice / fruit / bubbles in the hero
 js/polish.js            Liquid wipe, magnetic buttons, custom cursor, lens drips
 js/loadScript.js        Lazy loader for UMD libraries
@@ -75,6 +93,7 @@ js/three/stage.js       Base class for extra 3D sections sharing the hero's rend
 js/three/carousel.js    3D flavor carousel (ring, glossy floor, drag + snap)
 js/three/anatomy.js     Exploded view + live callouts with leader lines
 js/three/pour.js        Can-to-glass pour: clipped liquid, rope, ice, bubbles, foam
+assets/readme/          README banner (animated SVG)
 assets/                 Your files (cans, splash, fruit, decor, audio, env, models)
 ```
 
@@ -181,6 +200,7 @@ marquee all pick it up.
 | `SCENE_3D.particles`, `.condensation`, `.flyers` | Particle budgets, desktop / mobile |
 | `PHYSICS` | Number of ice cubes, fruit and bubbles; `mobileScale` |
 | `STORY` | The scroll-story beats (kicker, title, text) |
+| `SHOP` | Currency, free-shipping threshold, pack sizes and prices, `checkoutUrl` |
 | `ANATOMY` | Exploded-view callouts: `part` (`tab`, `lid`, `sleeve`, `wall`, `liquid`, `base`), `side` (`left`/`right`), title, text |
 
 ## How the extra 3D sections work
@@ -201,6 +221,26 @@ To change the shake sensitivity, see `addPressure()` / `trackShakeDrag()` in
 On iPhone, motion access is requested the first time "Hold to shake" is
 pressed.
 
+## Shop and checkout
+
+The shop is configured in `SHOP` (`js/config.js`): pack sizes and prices,
+currency and the free-shipping threshold. Flavors come from `FLAVORS`, so a new
+flavor appears in the mixer automatically. The cart is saved in `localStorage`.
+
+Checkout is a demo until you connect a store. Set `SHOP.checkoutUrl` to a
+Stripe Payment Link or a Shopify cart URL and the **Checkout** button redirects
+there. For a real order flow, build the line items on your server from the
+cart (`size`, `mix`, `qty`) rather than trusting prices from the browser.
+
+## Header and footer
+
+- **Header:** `js/chrome.js` drives the scroll progress bar, hides the bar on
+  scroll down and shows it on scroll up, highlights the current section and
+  runs the mobile menu (Escape closes it).
+- **Footer:** the newsletter form only validates the address. Point it at your
+  email provider (Mailchimp, Formspree, etc.) in `chrome.js`. The Company,
+  Follow and legal links are placeholders (`#`).
+
 ## Performance & accessibility
 
 - **One loop:** a single rAF (GSAP's ticker) drives Lenis, Three.js and Matter.js.
@@ -210,4 +250,5 @@ pressed.
 - **Lazy loading:** Three.js, Lenis and Matter.js load only in the 3D experience. Other flavor labels, the HDR, physics and the card renders load after the intro, during idle time.
 - **DOM effects:** they animate only `transform` and `opacity`.
 - **Accessibility:** the hero can is still a real `<button>` (keyboard: Enter/Space to open, R to spin). The carousel stage takes arrow keys and Enter, with real prev/next/dot buttons beside it. "Hold to shake" works with a held Space or Enter. The flavor picker is an ARIA radio group, and flavor changes are announced.
+- **Shop:** the cart drawer is `inert` while closed, traps no focus away from the page, closes on Escape or backdrop click, and announces totals politely. Quantity and size controls are real buttons with labels.
 - **Fallback:** reduced motion, or no WebGL, gets the lightweight 2D site.

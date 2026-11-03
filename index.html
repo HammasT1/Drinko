@@ -63,13 +63,19 @@
   <!-- 3D hero can (WebGL). Hidden in the 2D fallback. -->
   <canvas class="scene3d" id="scene3d" aria-hidden="true"></canvas>
 
-  <header class="nav">
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
     <a class="nav__logo" href="#top">Drinko<sup>®</sup></a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#flavors">Flavors</a>
+      <a href="#anatomy">Anatomy</a>
       <a href="#inside">Inside</a>
-      <a href="#grab">Grab one</a>
+      <a href="#pour">Pour</a>
+      <a href="#shop">Shop</a>
     </nav>
+    <a class="nav__cta btn btn--accent" href="#shop">Shop</a>
+    <button class="cart-btn" id="cartBtn" type="button" aria-label="Open cart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h13l-1.5 8H8L6 7zm0 0L5 3H2M9 20a1 1 0 1 0 0-.01M17 20a1 1 0 1 0 0-.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="cart-btn__count" id="cartCount">0</span></button>
     <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false">
       <svg class="sound-toggle__icon sound-toggle__icon--off" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/>
@@ -82,7 +88,15 @@
       <span>Sound</span>
       <span class="sound-toggle__state" aria-hidden="true">Off</span>
     </button>
+  <button class="nav__burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span></button>
   </header>
+  <div class="menu" id="navMenu" hidden>
+    <a href="#flavors">Flavors</a>
+    <a href="#anatomy">Anatomy</a>
+    <a href="#inside">Inside</a>
+    <a href="#pour">Pour</a>
+    <a href="#shop">Shop</a>
+  </div>
 
   <main id="main">
     <!-- 1. Hero -->
@@ -213,6 +227,35 @@
         <div class="pour__stage" id="pourStage" aria-hidden="true"></div>
       </div>
     </section>
+    <!-- Shop: pack builder + cart -->
+    <section class="shop" id="shop" aria-labelledby="shopTitle">
+      <header class="section-head">
+        <p class="eyebrow">Shop</p>
+        <h2 class="section-title" id="shopTitle" data-split>Build your pack.</h2>
+        <p class="section-lead">Pick a size, mix the flavors, and we'll ship it ice-cold. Free shipping over <span id="shopFree"></span>.</p>
+      </header>
+      <div class="shop__grid">
+        <div class="shop__panel">
+          <h3 class="shop__step"><span>1</span> Pack size</h3>
+          <div class="packs" id="packs" role="radiogroup" aria-label="Pack size"></div>
+          <h3 class="shop__step"><span>2</span> Mix your flavors <em id="packCount" role="status"></em></h3>
+          <ul class="mixer" id="mixer"></ul>
+          <button class="btn btn--ghost shop__auto" id="mixAuto" type="button">Surprise me</button>
+        </div>
+        <aside class="shop__summary" aria-live="polite">
+          <div class="shop__minis" id="miniPack" aria-hidden="true"></div>
+          <p class="shop__name" id="summaryName"></p>
+          <p class="shop__price" id="summaryPrice"></p>
+          <p class="shop__each" id="summaryEach"></p>
+          <button class="btn btn--accent btn--big" id="addToCart" type="button">Add to cart</button>
+          <ul class="shop__perks">
+            <li>Free shipping over the threshold</li>
+            <li>30-day fizz-back guarantee</li>
+            <li>Recyclable aluminum cans</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
   </main>
 
   <!-- 4. Footer CTA -->
@@ -221,8 +264,59 @@
     <p class="footer__lead">Go on, tap a can. Nobody's watching.</p>
     <div class="footer__cans" id="footerCans"></div>
     <button class="btn btn--accent btn--big" id="ctaCrack" type="button">Crack one open</button>
-    <p class="footer__legal">© 2026 Drinko. A fictional brand made for a portfolio project. Please recycle your imaginary cans.</p>
+
+    <div class="footer__main">
+      <div class="footer__brand">
+        <a class="nav__logo" href="#top">Drinko<sup>®</sup></a>
+        <p>Three flavors. Zero boring. Crafted to be loud, cold and impossible to ignore.</p>
+        <form class="signup" id="signup" novalidate>
+          <label class="sr-only" for="signupEmail">Email address</label>
+          <input id="signupEmail" type="email" placeholder="you@email.com" autocomplete="email" required>
+          <button class="btn btn--accent" type="submit">Join the fizz</button>
+          <p class="signup__msg" id="signupMsg" role="status"></p>
+        </form>
+      </div>
+      <nav class="footer__col" aria-label="Explore">
+        <h3>Explore</h3>
+        <a href="#flavors">Flavors</a>
+        <a href="#anatomy">Anatomy</a>
+        <a href="#inside">Ingredients</a>
+        <a href="#pour">The pour</a>
+        <a href="#shop">Shop</a>
+      </nav>
+      <nav class="footer__col" aria-label="Company">
+        <h3>Company</h3>
+        <a href="#">About</a>
+        <a href="#">Stockists</a>
+        <a href="#">FAQ</a>
+        <a href="#">Contact</a>
+      </nav>
+      <nav class="footer__col" aria-label="Follow">
+        <h3>Follow</h3>
+        <a href="#" rel="noopener">Instagram</a>
+        <a href="#" rel="noopener">TikTok</a>
+        <a href="#" rel="noopener">YouTube</a>
+        <a href="#" rel="noopener">LinkedIn</a>
+      </nav>
+    </div>
+    <div class="footer__bar">
+      <p class="footer__legal">© 2026 Drinko. A fictional brand made for a portfolio project. Please recycle your imaginary cans.</p>
+      <div class="footer__links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a><a href="#top" class="footer__top">Back to top ↑</a></div>
+    </div>
   </footer>
+
+  <div class="drawer-scrim" id="drawerScrim" hidden></div>
+  <aside class="drawer" id="drawer" aria-label="Shopping cart" aria-hidden="true" inert>
+    <header class="drawer__head"><h2>Your cart</h2><button type="button" id="drawerClose" aria-label="Close cart">&times;</button></header>
+    <div class="drawer__ship"><p id="shipMsg"></p><div class="drawer__bar"><span id="shipBar"></span></div></div>
+    <ul class="drawer__items" id="cartItems"></ul>
+    <p class="drawer__empty" id="cartEmpty">Your cart is empty. Time to build a pack.</p>
+    <footer class="drawer__foot">
+      <p class="drawer__sub"><span>Subtotal</span><strong id="cartSub"></strong></p>
+      <button class="btn btn--accent btn--big" id="checkout" type="button">Checkout</button>
+      <p class="drawer__note" id="checkoutNote" role="status"></p>
+    </footer>
+  </aside>
 
   <!-- Particle layer for bursts (above everything, ignores the pointer) -->
   <div class="fx-layer" aria-hidden="true"></div>

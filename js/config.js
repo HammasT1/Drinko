@@ -198,3 +198,20 @@ export const FUN_FACTS = [
   { value: 330, suffix: 'ml', label: 'of pure fizz' },
   { value: 0, suffix: '', label: 'artificial colors' },
 ];
+
+/**
+ * Shop. Prices are in the smallest sensible unit shown to the customer.
+ * `checkoutUrl`: set to a Stripe Payment Link / Shopify cart URL to make the
+ * Checkout button go live; leave empty to show a demo message instead.
+ */
+export const SHOP = {
+  currency: 'USD',
+  locale: 'en-US',
+  freeShippingOver: 40,
+  checkoutUrl: '',
+  packs: [
+    { size: 6, price: 14, tag: '' },
+    { size: 12, price: 25, tag: 'Most popular' },
+    { size: 24, price: 46, tag: 'Best value' },
+  ],
+};
