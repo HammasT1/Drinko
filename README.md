@@ -17,9 +17,18 @@ Real-time 3D, physics, scroll storytelling and a working cart, in plain HTML, CS
 
 </div>
 
-<!-- Add a preview GIF here: ![Preview](assets/readme/preview.gif) -->
+<div align="center">
+
+<img src="assets/readme/preview.gif" alt="Drinko website preview" width="100%">
+
+</div>
 
 ## Highlights
+
+<img src="assets/readme/features.svg" alt="Feature highlights" width="100%">
+
+<details>
+<summary>Read the details</summary>
 
 | | |
 |---|---|
@@ -32,12 +41,16 @@ Real-time 3D, physics, scroll storytelling and a working cart, in plain HTML, CS
 | **Premium chrome** | Floating glass header with scroll progress, hide-on-scroll, active-section highlight and mobile menu. Full footer with newsletter signup. |
 | **Resilient** | 2D fallback without WebGL or with reduced motion. Adaptive quality keeps frame rate near 60 on integrated GPUs. |
 
+</details>
+
 Also included: Lenis smooth scroll, Matter.js ice and fruit, a liquid-wipe
 flavor transition, a custom cursor, magnetic buttons, film grain and a
 toggleable sound design.
 
 **Try it:** tap a can to crack it open. Drag the hero can to spin it. Double-tap,
 long-press or press **R** for a 360 spin. Pick a flavor to flood the page with it.
+
+<img src="assets/readme/divider.svg" alt="" width="100%">
 
 ## Running it
 
@@ -56,6 +69,8 @@ from CDNs, so the first load needs an internet connection.
 Add `?debug` to the URL to get `window.drinko` (`hero3d`, `physics`,
 `carousel`, `anatomy`, `pour`) in the console.
 
+<img src="assets/readme/divider.svg" alt="" width="100%">
+
 ## Page order
 
 Header → Hero (with **Shake it**) → scroll story → marquee → **3D flavor
@@ -64,6 +79,8 @@ action, newsletter, links) with the cart drawer available everywhere.
 
 In the 2D fallback, the carousel stays the flat flavor cards, the anatomy is a
 list of facts, and the pour is plain copy.
+
+<img src="assets/readme/divider.svg" alt="" width="100%">
 
 ## Project structure
 
@@ -96,6 +113,8 @@ js/three/pour.js        Can-to-glass pour: clipped liquid, rope, ice, bubbles, f
 assets/readme/          README banner (animated SVG)
 assets/                 Your files (cans, splash, fruit, decor, audio, env, models)
 ```
+
+<img src="assets/readme/divider.svg" alt="" width="100%">
 
 ## Swapping in your own assets
 
@@ -166,6 +185,8 @@ on your can art.
 Three.js is mapped in the import map at the top of `index.html`. Lenis and
 Matter.js URLs live in `LIBS` in `config.js`.
 
+<img src="assets/readme/divider.svg" alt="" width="100%">
+
 ## Adding a new flavor
 
 Add an object to `FLAVORS` in `js/config.js`:
@@ -190,6 +211,8 @@ Add an object to `FLAVORS` in `js/config.js`:
 The picker, 3D label, lights, particles, backgrounds, cards, footer and
 marquee all pick it up.
 
+<img src="assets/readme/divider.svg" alt="" width="100%">
+
 ## Tuning
 
 | Setting (`config.js`) | Controls |
@@ -202,6 +225,8 @@ marquee all pick it up.
 | `STORY` | The scroll-story beats (kicker, title, text) |
 | `SHOP` | Currency, free-shipping threshold, pack sizes and prices, `checkoutUrl` |
 | `ANATOMY` | Exploded-view callouts: `part` (`tab`, `lid`, `sleeve`, `wall`, `liquid`, `base`), `side` (`left`/`right`), title, text |
+
+<img src="assets/readme/divider.svg" alt="" width="100%">
 
 ## How the extra 3D sections work
 
@@ -221,6 +246,8 @@ To change the shake sensitivity, see `addPressure()` / `trackShakeDrag()` in
 On iPhone, motion access is requested the first time "Hold to shake" is
 pressed.
 
+<img src="assets/readme/divider.svg" alt="" width="100%">
+
 ## Shop and checkout
 
 The shop is configured in `SHOP` (`js/config.js`): pack sizes and prices,
@@ -232,6 +259,8 @@ Stripe Payment Link or a Shopify cart URL and the **Checkout** button redirects
 there. For a real order flow, build the line items on your server from the
 cart (`size`, `mix`, `qty`) rather than trusting prices from the browser.
 
+<img src="assets/readme/divider.svg" alt="" width="100%">
+
 ## Header and footer
 
 - **Header:** `js/chrome.js` drives the scroll progress bar, hides the bar on
@@ -240,6 +269,8 @@ cart (`size`, `mix`, `qty`) rather than trusting prices from the browser.
 - **Footer:** the newsletter form only validates the address. Point it at your
   email provider (Mailchimp, Formspree, etc.) in `chrome.js`. The Company,
   Follow and legal links are placeholders (`#`).
+
+<img src="assets/readme/divider.svg" alt="" width="100%">
 
 ## Performance & accessibility
 
@@ -252,3 +283,5 @@ cart (`size`, `mix`, `qty`) rather than trusting prices from the browser.
 - **Accessibility:** the hero can is still a real `<button>` (keyboard: Enter/Space to open, R to spin). The carousel stage takes arrow keys and Enter, with real prev/next/dot buttons beside it. "Hold to shake" works with a held Space or Enter. The flavor picker is an ARIA radio group, and flavor changes are announced.
 - **Shop:** the cart drawer is `inert` while closed, traps no focus away from the page, closes on Escape or backdrop click, and announces totals politely. Quantity and size controls are real buttons with labels.
 - **Fallback:** reduced motion, or no WebGL, gets the lightweight 2D site.
+
+<img src="assets/readme/footer.svg" alt="Crack the fizz." width="100%">
